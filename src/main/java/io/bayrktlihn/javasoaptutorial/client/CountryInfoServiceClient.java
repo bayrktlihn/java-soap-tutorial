@@ -1,6 +1,7 @@
 package io.bayrktlihn.javasoaptutorial.client;
 
 import io.bayrktlihn.javasoaptutorial.LoggingHandler;
+import io.bayrktlihn.javasoaptutorial.SecurityHandler;
 import org.oorsprong.websamples.ArrayOftCountryInfo;
 import org.oorsprong.websamples.CountryInfoService;
 import org.oorsprong.websamples.CountryInfoServiceSoapType;
@@ -20,6 +21,9 @@ public class CountryInfoServiceClient {
 
     private final CountryInfoServiceSoapType countryInfoServiceSoapType = countryInfoService.getCountryInfoServiceSoap();
 
+    private final String username = "test";
+    private final String password = "test";
+
 
     {
         String property = System.getProperty("application.profile");
@@ -33,6 +37,7 @@ public class CountryInfoServiceClient {
         Binding binding = bindingProvider.getBinding();
 
         List<Handler> handlerChain = binding.getHandlerChain();
+        handlerChain.add(new SecurityHandler(username, password));
         handlerChain.add(new LoggingHandler());
         binding.setHandlerChain(handlerChain);
     }
@@ -42,7 +47,7 @@ public class CountryInfoServiceClient {
         return countryInfoServiceSoapType.languageName(isoCode);
     }
 
-    public ArrayOftCountryInfo fullCountryInfoAllCountries(){
+    public ArrayOftCountryInfo fullCountryInfoAllCountries() {
         return countryInfoServiceSoapType.fullCountryInfoAllCountries();
     }
 
